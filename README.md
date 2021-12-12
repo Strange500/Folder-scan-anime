@@ -1,5 +1,34 @@
 # Folder-scan-anime
 
-Those scripts are made to manage, rename and encode file for plex or jellyfin no api are used 
 
-<h5>to start just copy scripts and change path</h5>
+Installation
+============
+
+Prerequisites
+-------------
+Make sure the executables for the following libraries are accessible.
+
+1. [HandbrakeCLI](https://handbrake.fr/downloads2.php) - to convert file
+
+Installation
+------------
+
+Just download those scripts and change path
+
+
+Usage
+=====
+put file in a directory and change path in file and then lauch with .bat file or whatever you can set scripts to lauch with ecrontab -e or in windows by task manager
+you may need to create a custom handbrake preset or use the documentation for handbrakeCLI (I include my preset it gives great quality with small file encode in x265.
+
+Those scripts are build for server uses however you can use them in personal computer.
+    
+
+
+
+
+Developed By
+============
+* Benjamin Roget - <Benjamin.rogetpro@gmail.com>
+
+
