@@ -1,124 +1,124 @@
-import os
-
-no265="Téléchargements/to convert/"
-listeanime=["Platinum","Takt","Douki-chan","Shiroi","Demon","Komi-san"]
-dir_list = os.listdir("Téléchargements")
-dir_list_of_anime="JellyFin/Anime/Airing/"
-
-target_dir_list=os.listdir("JellyFin/Anime/Airing/")
-list_season=["s","season 0","Season ",'s0',"(Mugen Ressha-hen)"]
-#print(target_dir_list)
-indice=0
+#! /usr/bin/python
+import os, logging
 
 
+logging.basicConfig(filename="/mnt/Disque-1/log_tri.log", level=logging.INFO)
+no265='path to directory for non-converted show'  
+listeanime=["show to scan for"]
+dir_list = os.listdir("path to directrory to scan")
+dir_list_of_anime="path to dir destination"
+splited_dir_list=[]
+dl_dir="path to main dir"
+target_dir=dir_list_of_anime
+target_dir_list=os.listdir(dir_list_of_anime)
+list_season=["s","season 0","season ",'s0']
+list_season_except=["(Mugen"]
+
+def encode(file):
+    if "265" in file or "x265" in file or "h265" in file or "HEVC" in file:
+
+        return True
 def Season_Find(file,anime,dir):
+
     lenght=len(file)
+    original=" ".join(file)
     file=" ".join(file)
+    file=file.replace("("," ")
+    file=file.replace(")"," ")
     file=file.replace("E"," ")
     file=file.lower()
-    file=file.split(" ")
-    print(file)
+
     for nb_of_format in range(len(list_season)):
+
         for nb_of_season in range(4):
+
             for n in range(lenght):
                 
-                if list_season[nb_of_format]+str(nb_of_season) in file and n+1<=lenght:
+                detect=list_season[nb_of_format]+str(nb_of_season)
+
+                if detect in file and n+1<=lenght:
                     
+                    
+                    #os.makedirs(dir+anime+"Season 0"+str(nb_of_season), exist_ok=True)
+
                     return "Season 0"+str(nb_of_season)+"/"
-    os.makedirs(dir+anime+"Season 01", exist_ok=True)
-    
+
+
+    print("---->GOING DEFAULT")
+    logging.info("---->GOING DEFAULT")
+    #os.makedirs(dir+anime+"Season 01", exist_ok=True)
     return "Season 01"+"/"
 
-
 def target_dir_find(target_dir_list,anime):
-    indice=0
+    
     for dir in target_dir_list:
+        
         dir=dir.split(" ")
+        
         for nb in range(len(dir)):
-            if anime==dir[nb]:
-                return target_dir+" ".join(dir)
-        indice=indice+1
-    print("ERROR NO DIRECTORY FOR ",anime,"FOUND")
+            
+            if anime in dir:
+
+                return target_dir+"/"+" ".join(dir)
+        
+    print("---->ERROR NO DIRECTORY FOR ",anime,"FOUND")
+    logging.error("---->ERROR NO DIRECTORY FOR "+anime+"FOUND")
+
+    return ""
+
 
 def find(target_dir,dl_dir,file,anime):
     """return process et target dans liste"""
-    
     separator=" "
-    for i in range(len(file)):
-        if file[i]==anime:
-            
-            print("FOUND AT",file[i])
-            process=dl_dir+separator.join(file)
-            print("SEARCHING FOR ENCODE")
-            
-            for n in range(len(file)):
+    if "." in separator.join(file):
+
+        for i in range(len(file)):
+
+            if file[i] in anime:
+
+                index=anime.index(file[i])
+                print("FOUND AT",file[i])
+                logging.info("FOUND AT "+file[i])
+                process=dl_dir+separator.join(file)
+                print("---->SEARCHING FOR ENCODE")
                 
-                string=file[n]
                 
-                string=string.replace("["," ")
-                string=string.replace("]"," ")
-                string=string.split(" ")
+                if encode(separator.join(file))==True:
+                        
+                    print("---->ENCODED IN X265")
+                    logging.info("---->ENCODED IN X265")
+                    print("---->SEARCHING FOR DIRECTORY")
+                    logging.info("---->SEARCHING FOR DIRECTORY")
+                    target=target_dir_find(target_dir_list,anime[index])+"/"+Season_Find(file,target_dir_find(target_dir_list,anime[index]),dir_list_of_anime)+separator.join(file)
+                    return [True,process,target,265]
+
+                target=target_dir+separator.join(file)
+                print("---->NOT ENCODED IN X265 PUTING TO CONVERT")
+                logging.info("---->NOT ENCODED IN X265 PUTING TO CONVERT")
+                return [True,process,no265+separator.join(file),"NOT X265 OR no ENCODE MENTIONNED"]
                 
-                for elt in range(len(string)):
-                    #print(string)
-                    if string[elt]=="265"or string[elt]=="x265"or string[elt]=="h265"or string[elt]=="HEVC":
-                        print("ENCODED IN X265")
-                        target=target_dir_find(target_dir_list,anime)+"/"+Season_Find(file,target_dir_find(target_dir_list,anime),dir_list_of_anime)+separator.join(file)
-                        return [True,process,target,265]
-            target="target_dir"+separator.join(file)
-            print("NOT ENCODED IN X265 PUTING TO CONVERT")
-            return [True,process,no265+separator.join(file),"NOT X265 OR no ENCODE MENTIONNED"]
-            
-            
-        
-        #print("NOTHING FOUND AT",file[i]) 
-            
     return [False]
 
 
 
-#print(dir_list)
-splited_dir_list=[]
+
 for file in dir_list:
+
     splited_dir_list.append(file.split(" "))
 
 
-    
-n=0
-
-dl_dir="Téléchargements/"
-target_dir="JellyFin/Anime/Airing/"
-
-
-
-
-#process=dl_dir+separator.join(splited_dir_list[7])
-#target=target_dir+separator.join(splited_dir_list[5])
-#print(process,target)
-#os.rename(process, target)
-
-
+      
 for file in splited_dir_list:
-    for file in splited_dir_list:
-        #print(file)
-        #print(separator.join(file))
-        #essai=0
-        
-        result=find(target_dir,dl_dir,file,listeanime[indice])
-        #print(len(splited_dir_list),indice)
     
-        if result[0]==True and indice+1<=len(splited_dir_list):
-            #print(result[1],result[2])
-            
-            os.rename(result[1],result[2])
-        
-    if indice+1<len(listeanime):
-            indice=indice+1
+    result=find(target_dir,dl_dir,file,listeanime)
 
-        
+    if result[0]==True:
 
-
-
+        print("---->MOVING TO",result[2])
+        logging.info("---->MOVING TO "+result[2])
+        os.rename(result[1],result[2])
+     
+    
 
 
 
