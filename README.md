@@ -14,7 +14,8 @@ Installation
 ------------
 
 Just download those scripts and change path
-
+you will need to create a txt file where the variable "listeanime"
+will be stored
 
 Usage
 =====
