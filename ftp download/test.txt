@@ -1,0 +1,6 @@
+freebox
+Boubou1208
+cd "Disque 1/Download"
+lcd F:/convertcache/Ready
+put "F:/convertcache/Ready/[Dondake] Mawaru Penguindrum - 24 [VOSTFR][720p]Season 01x265.mp4"
+quit
