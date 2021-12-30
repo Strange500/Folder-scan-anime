@@ -4,7 +4,6 @@ import os, logging, json, requests
 is265=False
 logging.basicConfig(filename="/mnt/Disque-1/log_tri.log", level=logging.INFO)
 no265='/mnt/Disque-1/Download/to convert/'
-listeanime=["Platinum End","Takt Op. Destiny","Ganbare, Douki-chan","Shiroi Suna no Aquatope","Demon Slayer",'Eighty Six',"Komi-san wa Komyushou Desu","My Senpai is Annoying","Jahy-sama wa Kujikenai!","Mushoku Tensei","Mieruko-chan","Saihate No Paladin","Black Clover","Erased","Blue Exorcist"]
 readd=open("/mnt/Disque-1/Download/listeanime.txt","r")
 listeanime= readd.read()
 readd.close()
@@ -16,8 +15,7 @@ dl_dir="/mnt/Disque-1/Download/"
 target_dir=dir_list_of_anime
 target_dir_list=os.listdir(dir_list_of_anime)
 list_season=["season 0",'s0']
-list_season_except=["(Mugen"]
-webhook_url="https://discord.com/api/webhooks/920359694520950795/JUsjTQwC6MIyHOmCs_CDxAdY0xO9e88Aj1QlebTqla3izEEm5H1RJduoeypybXDpmJ4t"
+webhook_url="https://discord.com/api/webhooks/919598673623679038/4Z0yAlJX24PsSdiyLxKTKhNLX-Nngq494QiKAM3QrOKsLfoQeXiERkBqfZvlnVlOMrcY"
 
 
 def delet_to_do(file,char):
@@ -69,7 +67,6 @@ def encode(file):
         return True
 def Season_Find(file,anime,dir):
 
-    original=file
     if "Demon Slayer" in file:
         return "Season 03/"
     file=file.replace("("," ")
@@ -115,9 +112,7 @@ def find(target_dir,dl_dir,file,anime):
     if ".mp4" in file or ".mkv" in  file:
 
         for animee in anime:
-            
             if animee in file:
-                index=anime.index(animee)
                 print("FOUND FOR",file)
                 logging.info("FOUND FOR "+file)
                 process=dl_dir+file
@@ -144,13 +139,15 @@ def find(target_dir,dl_dir,file,anime):
         if " - " in  file or "_-_" in file:
             lsanime=open('listeanime.txt',"w")
             ori=file
+            tkt=file
             if "[" in file:
                 nb_to_do=delet_to_do(file,"[")
                 nb_to_do1=delet_to_do(file,"(")
                 ori=sup_char(file,nb_to_do,nb_to_do1)
             if "_" in file:
                 ori=ori.replace("_"," ") 
-                os.rename(file,file.replace("_"," "))   
+                tkt=file.replace("_"," ")
+                os.rename(dl_dir+file,dl_dir+tkt)   
             discri=ori.split(" - ")
             discri=discri[0]
             
@@ -160,19 +157,49 @@ def find(target_dir,dl_dir,file,anime):
             listeanime2="%".join(listeanime)
             lsanime.write(listeanime2)
             lsanime.close()
-            os.makedirs(dir_list_of_anime+discri,0,exist_ok=True)
+            os.makedirs(dir_list_of_anime+"/"+discri,0,exist_ok=True)
             anime.append(discri)
             newlist=os.listdir(dir_list_of_anime)
             
             target=target_dir_find([discri],discri)+"/"+Season_Find(file,target_dir_find([discri],discri),dir_list_of_anime)
             os.makedirs(target,0,exist_ok=True)
+            return find(target_dir,dl_dir,tkt,listeanime)
+        else:
+            lsanime=open('listeanime.txt',"w")
+            newwfile=file.split(" ")
+            if "[" in newwfile[0]:
+                newwfile=" ".join(newwfile)
+                newwfile=newwfile.replace("]"," ")
+                newwfile=newwfile.split(" ")
+                if newwfile[1]!=" " and newwfile[1]!="":
+                    anime=newwfile[1]
+
+                else:
+                    anime=newwfile[2]
+                listeanime.append(anime)
+                listeanime2="%".join(listeanime)
+                lsanime.write(listeanime2)
+                lsanime.close()
+                target=target_dir_find([anime],anime)+"/"+Season_Find(file,target_dir_find([anime],anime),dir_list_of_anime)
+                os.makedirs(target,0,exist_ok=True)
+                return find(target_dir,dl_dir,file,listeanime)
+        
+            anime=file.split(" ")[0]
+            listeanime.append(anime)
+            listeanime2="%".join(listeanime)
+            lsanime.write(listeanime2)
+            lsanime.close()
+            target=target_dir_find([anime],anime)+"/"+Season_Find(file,target_dir_find([anime],anime),dir_list_of_anime)
+            os.makedirs(target,0,exist_ok=True)
             return find(target_dir,dl_dir,file,listeanime)
+
+
+
             
             
-            
+           
 
     return [False]
-
 
 def send_webhook_request(webhook_url):
     dir=os.listdir(no265)
@@ -183,7 +210,7 @@ def send_webhook_request(webhook_url):
         list_fichier.append(fichier)
 
     fichier='\n'.join(map(str, list_fichier))
-    content='yo il y a '+str(n)+' fichier à convertir : \n'+fichier
+    content='おはよう il y à '+str(n)+' fichier à convertir : \n'+fichier
     data =  {'name' : 'Directory Seeker',
                 'content': content}
 
@@ -200,6 +227,8 @@ for file in dir_list:
 
         print("---->MOVING TO",result[2])
         logging.info("---->MOVING TO "+result[2])
+        print(result)
+        
         os.rename(result[1],result[2])
         if result[-1]==True:
             is265=True
