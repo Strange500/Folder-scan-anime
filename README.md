@@ -1,6 +1,11 @@
 # Folder-scan-anime
 
 
+those scripts are made for server for sorting anime series and season in a directory you can also use it to convert file in the right encode like x265
+
+W.I.P
+
+
 Installation
 ============
 
