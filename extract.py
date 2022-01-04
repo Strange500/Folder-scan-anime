@@ -5,7 +5,7 @@ logging.basicConfig(filename="/mnt/Disque-1/log_tri.log", level=logging.INFO,fil
 main_dir="/mnt/Disque-1/Download"
 dir_watch=os.listdir(main_dir)
 
-list_season=["Season 0","Saison 0","Season ","Saison ","S0","S"]
+list_season=["Season 0","Saison 0","Season ","Saison ","S0","S","s0","s"]
 
 x=0
 dir_watch.pop(dir_watch.index("Ready"))
@@ -40,11 +40,11 @@ for anime in dir_watch:
     
     isx265=encode(anime)
 
-    if "." not in anime and "convert" not in anime and "Ready" not in anime and "tri" not in anime:
+    if ".m" not in anime and "convert" not in anime and "Ready" not in anime and "tri" not in anime and ".p" not in anime and ".b" not in anime and ".t" not in anime:
         sub_dir=os.listdir(main_dir+"/"+anime)
         main_season=Season_Find(anime,list_season)
         
-
+        logging.info("EXTRACTING "+anime)
         for season in sub_dir:
             print(season)
             if "." not in season:
@@ -57,7 +57,7 @@ for anime in dir_watch:
                 for file in seasonn:
                     
                     if dir_season != None  :
-                        logging.info("EXTRACTING "+anime)
+                        
                         if "mp4" in file or "mkv" in file:
                             print("i have find some ep")
                             renamed=file.split(".")
@@ -74,8 +74,10 @@ for anime in dir_watch:
                             logging.info("--->REANAMING "+str(file)+" TO "+ renamed)
                 
             if ".mkv" in season or ".mp4" in season:
-                renamed=season.split(".")
-                logging.info("EXTRACTING "+anime)
+                renamed=season.split(".m")
+                if "." in renamed[0]:
+                    renamed[0]=renamed[0].replace("."," ")
+                
                 if encode(anime)==True:
                     renamed[0]=renamed[0]+" x265 "
                     
@@ -85,7 +87,7 @@ for anime in dir_watch:
                         renamed[0]=renamed[0]+main_season
                     else:
                         renamed[0]=renamed[0]+"Season 01"
-                    renamed=".".join(renamed)
+                    renamed=".m".join(renamed)
                     print(main_dir+"/"+renamed)
                     logging.info("--->MOVING "+season+" TO /DONLOAD")
                     os.rename(main_dir+"/"+anime+"/"+season,main_dir+"/"+renamed)
@@ -95,17 +97,8 @@ for anime in dir_watch:
                     elif main_season != None:
                         renamed[0]=renamed[0]+main_season
                     else:
-                        logging.info("--->NO SEASON FIND GOING DEFAULT FOR "+season)
                         renamed[0]=renamed[0]+"Season 01"
-                    renamed=".".join(renamed)
+                    renamed=".m".join(renamed)
                     print(main_dir+"/"+renamed)
                     logging.info("--->MOVING "+season+" TO /DONLOAD")
                     os.rename(main_dir+"/"+anime+"/"+season,main_dir+"/"+renamed)
-
-
-
-                    
-                  
-                                        
-                    
-
