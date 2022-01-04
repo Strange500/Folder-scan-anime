@@ -1,21 +1,25 @@
 #! /usr/bin/python
-import os, logging, json, requests
+import os, logging, json, requests, random
 
 is265=False
 logging.basicConfig(filename="/mnt/Disque-1/log_tri.log", level=logging.INFO)
 no265='/mnt/Disque-1/Download/to convert/'
-readd=open("/mnt/Disque-1/Download/listeanime.txt","r")
-listeanime= readd.read()
-readd.close()
-listeanime=listeanime.split("%")
+#readd=open("/mnt/Disque-1/Download/listeanime.txt","r")
+#listeanime= readd.read()
+#readd.close()
+#listeanime=listeanime.split("%")
+
 dir_list = os.listdir("/mnt/Disque-1/Download")
 dir_list_of_anime="/mnt/Disque-1/JellyFin/Anime/Airing"
+listeanime=os.listdir(dir_list_of_anime)
+print(listeanime)
 splited_dir_list=[]
 dl_dir="/mnt/Disque-1/Download/"
 target_dir=dir_list_of_anime
 target_dir_list=os.listdir(dir_list_of_anime)
 list_season=["season 0",'s0']
-webhook_url="https://discord.com/api/webhooks/919598673623679038/4Z0yAlJX24PsSdiyLxKTKhNLX-Nngq494QiKAM3QrOKsLfoQeXiERkBqfZvlnVlOMrcY"
+webhook_url="https://discord.com/api/webhooks/927277287844511785/1eFAP8vQPcK8tObke_GJIJvAp9pIKLmdKLGr_ddPfTSms9uQqTztcwyPFCBgfIwyL0BK"
+entier=["1","2","3","4","5","6","7","8","9"]
 
 
 def delet_to_do(file,char):
@@ -112,6 +116,7 @@ def find(target_dir,dl_dir,file,anime):
     if ".mp4" in file or ".mkv" in  file:
 
         for animee in anime:
+            print(anime)
             if animee in file:
                 print("FOUND FOR",file)
                 logging.info("FOUND FOR "+file)
@@ -177,18 +182,20 @@ def find(target_dir,dl_dir,file,anime):
                 else:
                     anime=newwfile[2]
                 listeanime.append(anime)
-                listeanime2="%".join(listeanime)
-                lsanime.write(listeanime2)
-                lsanime.close()
+                #listeanime2="%".join(listeanime)
+                #lsanime.write(listeanime2)
+                #lsanime.close()
                 target=target_dir_find([anime],anime)+"/"+Season_Find(file,target_dir_find([anime],anime),dir_list_of_anime)
                 os.makedirs(target,0,exist_ok=True)
                 return find(target_dir,dl_dir,file,listeanime)
         
-            anime=file.split(" ")[0]
+            if "S0" in file:
+                anime=file.split("S0")[0]
             listeanime.append(anime)
-            listeanime2="%".join(listeanime)
-            lsanime.write(listeanime2)
-            lsanime.close()
+            print(anime)
+            #listeanime2="%".join(listeanime)
+            #lsanime.write(listeanime2)
+            #lsanime.close()
             target=target_dir_find([anime],anime)+"/"+Season_Find(file,target_dir_find([anime],anime),dir_list_of_anime)
             os.makedirs(target,0,exist_ok=True)
             return find(target_dir,dl_dir,file,listeanime)
@@ -201,6 +208,46 @@ def find(target_dir,dl_dir,file,anime):
 
     return [False]
 
+def random_gif(search,lmt):
+        # set the apikey and limit
+    apikey = "API_KEY_TENOR"  # test value
+    
+
+    # our test search
+    
+
+    # get the top 8 GIFs for the search term
+    r = requests.get(
+        "https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (search, apikey, lmt))
+
+    if r.status_code == 200:
+        # load the GIFs using the urls for the smaller GIF sizes
+        top_8gifs = json.loads(r.content)
+        #print(top_8gifs)
+    else:
+        top_8gifs = None
+
+
+    # continue a similar pattern until the user makes a selection or starts a new search.
+
+    liste=[]
+    top_8gifs= str(top_8gifs).split(",")
+    #print(top_8gifs)
+    for gif in top_8gifs:
+        #print(gif)
+        if "{'url':" in gif and "nano" not in gif and "mp4" not in gif and "medium" not in gif and "webm" not in gif and "tiny" not in gif :
+            print(gif)
+            #print(gif,top_8gifs.index(gif))
+            link="https"+gif.split("https")[1].replace("'","")
+            liste.append(link)
+
+    #print(liste)
+    #print(len(liste))
+    choice=random.choice(liste)
+    
+    return choice
+
+
 def send_webhook_request(webhook_url):
     dir=os.listdir(no265)
     list_fichier=[]
@@ -210,7 +257,7 @@ def send_webhook_request(webhook_url):
         list_fichier.append(fichier)
 
     fichier='\n'.join(map(str, list_fichier))
-    content='おはよう il y à '+str(n)+' fichier à convertir : \n'+fichier
+    content='おはよう il y à '+str(n)+' fichier à convertir : \n'+fichier+" "+random_gif("loading",32)
     data =  {'name' : 'Directory Seeker',
                 'content': content}
 
@@ -236,5 +283,3 @@ for file in dir_list:
     
 if is265==True:
     send_webhook_request(webhook_url)
-
-
