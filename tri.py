@@ -17,8 +17,8 @@ splited_dir_list=[]
 dl_dir="/mnt/Disque-1/Download/"
 target_dir=dir_list_of_anime
 target_dir_list=os.listdir(dir_list_of_anime)
-list_season=["season 0",'s0']
-webhook_url="https://discord.com/api/webhooks/927277287844511785/1eFAP8vQPcK8tObke_GJIJvAp9pIKLmdKLGr_ddPfTSms9uQqTztcwyPFCBgfIwyL0BK"
+list_season=["season 0",'s0',"s","season "]
+webhook_url="https://discord.com/api/webhooks/928368983290282055/yk7-3HG6J8BQiqFxT2Rpzd7So3ljeiGxq-WGv4RH6m4WwNWk433F9aQlhoyOB-mGTTsS"
 entier=["1","2","3","4","5","6","7","8","9"]
 
 
@@ -77,7 +77,9 @@ def Season_Find(file,anime,dir):
     file=file.replace(")"," ")
     file=file.replace("E"," ")
     file=file.lower()
-    
+    if "OAV" in  file:
+        os.makedirs(anime+"/"+"Season 00",0, exist_ok=True)
+        return "season 00/"
     for nb_of_format in range(len(list_season)):
 
         for nb_of_season in range(4):
@@ -114,6 +116,7 @@ def find(target_dir,dl_dir,file,anime):
     separator=" "
     target_dir_list=os.listdir(dir_list_of_anime)
     if ".mp4" in file or ".mkv" in  file:
+
 
         for animee in anime:
             print(anime)
@@ -210,7 +213,7 @@ def find(target_dir,dl_dir,file,anime):
 
 def random_gif(search,lmt):
         # set the apikey and limit
-    apikey = "API_KEY_TENOR"  # test value
+    apikey = "X90EVGHN8X7Z"  # test value
     
 
     # our test search
@@ -257,7 +260,7 @@ def send_webhook_request(webhook_url):
         list_fichier.append(fichier)
 
     fichier='\n'.join(map(str, list_fichier))
-    content='おはよう il y à '+str(n)+' fichier à convertir : \n'+fichier+" "+random_gif("loading",32)
+    content='おはよう il y à '+str(n)+' fichier à convertir : \n'+fichier+" "+random_gif("Zero two",32)
     data =  {'name' : 'Directory Seeker',
                 'content': content}
 
@@ -283,3 +286,7 @@ for file in dir_list:
     
 if is265==True:
     send_webhook_request(webhook_url)
+
+
+
+
