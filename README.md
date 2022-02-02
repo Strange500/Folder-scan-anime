@@ -5,22 +5,24 @@ those scripts are made for server for sorting anime series and season in a direc
 
 W.I.P
 
+These project work with three main programs an uploader to a ftp server, a sorter to manage transfered files and a converter for file not in x265
 
 Installation
 ============
+
+in each directories launch init.bat and you'r ready
 
 Prerequisites
 -------------
 Make sure the executables for the following libraries are accessible.
 
-1. [HandbrakeCLI](https://handbrake.fr/downloads2.php) - to convert file
+1. [HandbrakeCLI](https://handbrake.fr/downloads2.php) - to convert file , pls put it in converter directory
 
 Installation
 ------------
 
-Just download those scripts and change path
-you will need to create a txt file where the variable "listeanime"
-will be stored
+Just download those scripts and change path if needed
+
 
 if you want to encode file from another computer you will need to setup an ftp server and change path for txt file etc in ftp download directory
 
