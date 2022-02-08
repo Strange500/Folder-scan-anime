@@ -9,7 +9,7 @@ list_season=["Season 0"]
 
 x=0
 
-common_to_supp=["x265","h265","HEVC","VOSTFR", "MULTI","1080p","AAC","Bluray","10bits"]
+common_to_supp=["x265","h265","HEVC","VOSTFR", "MULTI","1080p","AAC","Bluray","10bits","x264","Season 01","Season 02",  "Season 03"]
 print()
 
 
@@ -87,14 +87,15 @@ for dir in dir_watch:
                 file_list=os.listdir(main_dir+"/"+dir+"/"+anime+"/"+dir_season)
                 
                 for file in file_list:
-                    if "mp4" in file or "mkv" in file:
+                    if ".m" in file :
                         nb_to_do=delet_to_do(file,"[")
                         nb_to_do1=delet_to_do(file,"(")
 
                         renamed=sup_char(file,nb_to_do,nb_to_do1)
-                        
+                        if "_" in file:
+                            file.replace("_"," ")
                         if renamed != file:
-                            logging.info("REANAMING "+str(file)+" TO "+ renamed)
+                            logging.info("RENAMING "+str(file)+" FOR "+ renamed)
 
                             os.rename(main_dir+"/"+dir+"/"+anime+"/"+dir_season+file,main_dir+"/"+dir+"/"+anime+"/"+dir_season+renamed)
             
