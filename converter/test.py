@@ -18,7 +18,7 @@ list_waifu=[["Yotsuba Nakano","https://www.personality-database.com/profile_imag
 
 os.makedirs("Ready",exist_ok=True)
 os.makedirs("toconvert",exist_ok=True)
-cp_target='"'+main_dir+"\\toconvert"
+cp_target='"'+main_dir+"/toconvert"
 
 
 #####################Creating bat file ####################################
@@ -68,6 +68,8 @@ def random_gif(search,lmt):
         if "{'url':" in gif and "nano" not in gif and "mp4" not in gif and "medium" not in gif and "webm" not in gif and "tiny" not in gif :
             link="https"+gif.split("https")[1].replace("'","")
             liste.append(link)
+    if liste==[]:
+        return random_gif(search,lmt*2)
     choice=random.choice(liste)
     return choice
 
@@ -108,9 +110,13 @@ while True:
         if "mp4" in file or "mkv" in file:
             #shutil.move("z:/Download/to convert/"+file,cp_target+"/"+file)
             handbrake_command[5]=main_dir+"/toconvert"+"/"+file
-            output_file=file.split(".")
-            output_file[-2]=output_file[-2]+"x265"
-            output_file=".".join(output_file)
+            if "x264" in file:
+                orii=file
+                output_file=file.replace("x264","x265")
+            else:
+                output_file=file.split(".")
+                output_file[-2]=output_file[-2]+"x265"
+                output_file=".".join(output_file)
             handbrake_command[7]=main_dir+"/Ready"+"/"+output_file
             handbrake_command[7]= handbrake_command[7].replace(".mkv",".mp4")
             handbrake_command[7].replace(" "," x265 ",1)
@@ -126,21 +132,16 @@ while True:
             
             
             
-            #os.remove(handbrake_command[5])
+            os.remove(handbrake_command[5])
         
 
     print(datetime.now().strftime('%H:%M:%S')+": waiting for file")
     while len(os.listdir(main_dir+"/toconvert"))==0:
         dir=os.listdir("//Freebox_Server/disque 1/Download/to convert")
-        print("chekc")
-        for fil in dir:
+        
+        if len(dir)!=0:
             
-            get_ftp(fil)
-            directory.append(fil)
+            get_ftp(dir[0])
+            directory.append(dir[0])
         time.sleep(30)
     
-
-
-
-
-
