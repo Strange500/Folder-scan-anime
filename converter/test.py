@@ -4,7 +4,7 @@ main_dir=os.getcwd()
 
 print(main_dir)
 logging.basicConfig(filename="//Freebox_Server/disque 1/log_tri.txt", level=logging.INFO)
-webhook_url="https://discord.com/api/webhooks/928583375109894185/Cy0mgGvRMl0SgHU-ZkcHoS1odXFljlGxEKJQ4Rl_wvR2G5Y7A0DryDqFIkCK-ndtbY1F"
+webhook_url="webhook_url"
 get_command=["get","file"]
 put_command=["put","file"]
 instructput=["freebox","Boubou1208",'cd "Disque 1/Download/to convert"',"lcd "+"'"+main_dir+"'",'put "[KnK] Uma Musume Pretty Derby - 13 VOSTFR [BD 1080p FLAC 5Season 01.1 AAC 2.0].mkv"']
@@ -125,13 +125,14 @@ while True:
             send_webhook_request(webhook_url,begin,file,random_waifu())
             print(handbrake_command)
             subprocess.run(handbrake_command, shell=True)
-            send_webhook_request(webhook_url,end,file,random_waifu())
-            logging.info("ENCODE COMPLETE FOR "+file)
-            put_ftp(handbrake_command[7])
-            os.remove(handbrake_command[7])
-            
-            
-            
+            if len(os.listdir(main_dir+"/Ready"))!=0:
+                send_webhook_request(webhook_url,end,file,random_waifu())
+                logging.info("ENCODE COMPLETE FOR "+file)
+                put_ftp(handbrake_command[7])
+                os.remove(handbrake_command[7])
+                
+                
+                
             os.remove(handbrake_command[5])
         
 
@@ -145,3 +146,8 @@ while True:
             directory.append(dir[0])
         time.sleep(30)
     
+
+
+
+
+
